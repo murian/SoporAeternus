@@ -40,14 +40,33 @@ class GameEngine {
      * Setup global event listeners
      */
     setupEventListeners() {
+        // Start button - ensure it exists and add listener
+        const startButton = document.getElementById('start-button');
+        if (startButton) {
+            startButton.addEventListener('click', () => this.startGame());
+            console.log('Start button listener attached');
+        } else {
+            console.error('Start button not found!');
+        }
+
         // Menu buttons
-        document.getElementById('start-button')?.addEventListener('click', () => this.startGame());
-        document.getElementById('menu-continue')?.addEventListener('click', () => this.hideMenu());
-        document.getElementById('menu-save')?.addEventListener('click', () => this.saveGame());
-        document.getElementById('menu-load')?.addEventListener('click', () => this.loadGame());
-        document.getElementById('menu-restart')?.addEventListener('click', () => this.restartGame());
-        document.getElementById('audio-toggle')?.addEventListener('click', () => this.toggleAudio());
-        document.getElementById('interaction-close')?.addEventListener('click', () => this.closeInteraction());
+        const menuContinue = document.getElementById('menu-continue');
+        if (menuContinue) menuContinue.addEventListener('click', () => this.hideMenu());
+
+        const menuSave = document.getElementById('menu-save');
+        if (menuSave) menuSave.addEventListener('click', () => this.saveGame());
+
+        const menuLoad = document.getElementById('menu-load');
+        if (menuLoad) menuLoad.addEventListener('click', () => this.loadGame());
+
+        const menuRestart = document.getElementById('menu-restart');
+        if (menuRestart) menuRestart.addEventListener('click', () => this.restartGame());
+
+        const audioToggle = document.getElementById('audio-toggle');
+        if (audioToggle) audioToggle.addEventListener('click', () => this.toggleAudio());
+
+        const interactionClose = document.getElementById('interaction-close');
+        if (interactionClose) interactionClose.addEventListener('click', () => this.closeInteraction());
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
@@ -61,23 +80,35 @@ class GameEngine {
      * Start the game
      */
     startGame() {
-        document.getElementById('start-screen').classList.add('fade-out');
+        console.log('🌑 Starting game...');
+
+        const startScreen = document.getElementById('start-screen');
+        if (!startScreen) {
+            console.error('Start screen element not found!');
+            return;
+        }
+
+        startScreen.classList.add('fade-out');
         setTimeout(() => {
-            document.getElementById('start-screen').style.display = 'none';
+            startScreen.style.display = 'none';
+            console.log('Start screen hidden');
 
             // Check if there's a saved game
             const hasSave = localStorage.getItem('hades_pluton_save') ||
                            localStorage.getItem('hades_pluton_autosave');
 
             if (hasSave) {
+                console.log('Saved game found, loading...');
                 // Try to load the saved game (without notification)
                 const loaded = this.loadGame(false);
                 if (!loaded) {
                     // If load failed, start fresh
+                    console.log('Load failed, starting fresh');
                     this.loadScene('river_styx');
                 }
             } else {
                 // No save, start fresh
+                console.log('No save found, starting fresh at River Styx');
                 this.loadScene('river_styx');
             }
 
@@ -593,3 +624,4 @@ class GameEngine {
 
 // Global game instance
 const game = new GameEngine();
+window.game = game; // Ensure it's available globally
