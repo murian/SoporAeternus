@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hades · Pluton - A Journey Through the Underworld</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Main Game Display -->
+        <div id="game-screen">
+            <!-- Scene Background -->
+            <div id="scene-background" class="scene-bg"></div>
+
+            <!-- Atmospheric Particles -->
+            <div id="particle-container"></div>
+
+            <!-- Scene Content -->
+            <div id="scene-content">
+                <div id="scene-title"></div>
+                <div id="scene-description"></div>
+                <div id="scene-objects"></div>
+            </div>
+
+            <!-- Character Display -->
+            <div id="character-container">
+                <div id="character-portrait"></div>
+                <div id="character-name">Anna-Varney Cantodea</div>
+            </div>
+
+            <!-- Dialogue Box -->
+            <div id="dialogue-box" class="hidden">
+                <div id="dialogue-speaker"></div>
+                <div id="dialogue-text"></div>
+                <div id="dialogue-choices"></div>
+            </div>
+
+            <!-- Interaction Overlay -->
+            <div id="interaction-overlay" class="hidden">
+                <div id="interaction-content"></div>
+                <div id="interaction-close">✕</div>
+            </div>
+        </div>
+
+        <!-- UI Elements -->
+        <div id="ui-container">
+            <!-- Navigation -->
+            <div id="navigation-panel">
+                <h3>Passages</h3>
+                <div id="navigation-options"></div>
+            </div>
+
+            <!-- Inventory -->
+            <div id="inventory-panel">
+                <h3>Possessions</h3>
+                <div id="inventory-items"></div>
+            </div>
+
+            <!-- Journal/Log -->
+            <div id="journal-panel">
+                <h3>Memoirs of Shadow</h3>
+                <div id="journal-entries"></div>
+            </div>
+
+            <!-- Status -->
+            <div id="status-panel">
+                <div id="status-essence">
+                    <span class="status-label">Essence:</span>
+                    <span id="essence-value">100</span>
+                </div>
+                <div id="status-sanity">
+                    <span class="status-label">Lucidity:</span>
+                    <span id="sanity-value">100</span>
+                </div>
+                <div id="status-depth">
+                    <span class="status-label">Depth:</span>
+                    <span id="depth-value">The First Veil</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Overlay -->
+        <div id="menu-overlay" class="hidden">
+            <div id="menu-content">
+                <h2>In the Shadows Between</h2>
+                <div id="menu-options">
+                    <button id="menu-continue" class="menu-btn">Continue Journey</button>
+                    <button id="menu-save" class="menu-btn">Preserve Memory</button>
+                    <button id="menu-load" class="menu-btn">Recall Memory</button>
+                    <button id="menu-settings" class="menu-btn">Adjust Perception</button>
+                    <button id="menu-restart" class="menu-btn">Begin Anew</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <div id="title-container">
+                <h1 id="game-title">HADES · PLUTON</h1>
+                <p id="game-subtitle">A Journey Through the Underworld</p>
+                <div id="title-decoration">⚰</div>
+                <p id="game-attribution">Inspired by Sopor Aeternus & the Ensemble of Shadows</p>
+                <button id="start-button" class="glow-button">Enter the Realm of Shadow</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Container -->
+    <div id="audio-container" class="hidden">
+        <button id="audio-toggle" title="Toggle Audio">🔊</button>
+    </div>
+
+    <script src="game-engine.js"></script>
+    <script src="game-data.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
