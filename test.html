@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test - Hades Pluton</title>
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            font-family: monospace;
+            padding: 20px;
+        }
+        button {
+            padding: 20px 40px;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .log {
+            background: #111;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌑 Start Button Diagnostic Test</h1>
+
+    <div>
+        <h2>Test Buttons:</h2>
+        <button id="test1" onclick="log('Inline onclick works!')">Test 1: Inline onclick</button>
+        <button id="test2">Test 2: Event listener</button>
+        <button id="test3" onclick="if(typeof game !== 'undefined') game.startGame(); else log('Game not defined')">
+            Test 3: Game start (inline)
+        </button>
+    </div>
+
+    <div class="log" id="log">
+        <strong>Console Log:</strong><br>
+    </div>
+
+    <div>
+        <h2>Diagnostic Info:</h2>
+        <div id="info"></div>
+    </div>
+
+    <script src="game-engine.js"></script>
+    <script src="game-data.js"></script>
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        // Test 2: Event listener
+        document.addEventListener('DOMContentLoaded', () => {
+            log('DOM Content Loaded');
+
+            const test2 = document.getElementById('test2');
+            if (test2) {
+                test2.addEventListener('click', () => log('Event listener works!'));
+                log('Test 2 listener attached');
+            } else {
+                log('ERROR: Test 2 button not found');
+            }
+
+            // Show diagnostic info
+            const info = document.getElementById('info');
+            info.innerHTML = `
+                <p><strong>Game object exists:</strong> ${typeof game !== 'undefined' ? 'YES ✓' : 'NO ✗'}</p>
+                <p><strong>Game on window:</strong> ${typeof window.game !== 'undefined' ? 'YES ✓' : 'NO ✗'}</p>
+                <p><strong>GAME_SCENES exists:</strong> ${typeof GAME_SCENES !== 'undefined' ? 'YES ✓' : 'NO ✗'}</p>
+                <p><strong>User Agent:</strong> ${navigator.userAgent}</p>
+                <p><strong>Cookies enabled:</strong> ${navigator.cookieEnabled ? 'YES' : 'NO'}</p>
+                <p><strong>LocalStorage available:</strong> ${typeof localStorage !== 'undefined' ? 'YES' : 'NO'}</p>
+            `;
+
+            // Try to initialize game
+            if (typeof game !== 'undefined' && typeof GAME_SCENES !== 'undefined') {
+                try {
+                    game.init(GAME_SCENES);
+                    log('Game initialized successfully');
+                } catch (e) {
+                    log('ERROR initializing game: ' + e.message);
+                }
+            } else {
+                log('Cannot initialize game - missing dependencies');
+            }
+        });
+
+        log('Script loaded');
+    </script>
+</body>
+</html>
