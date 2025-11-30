@@ -17,7 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
     `);
 
     // Initialize the game engine with scene data
+    if (typeof GAME_SCENES === 'undefined') {
+        console.error('FATAL ERROR: GAME_SCENES not loaded! Check if game-data.js loaded correctly.');
+        alert('Game data failed to load. Please refresh the page.');
+        return;
+    }
+
+    console.log('GAME_SCENES loaded with', Object.keys(GAME_SCENES).length, 'scenes');
     game.init(GAME_SCENES);
+    console.log('Game engine initialized');
 
     // Check for existing save
     const hasSave = localStorage.getItem('hades_pluton_save') ||

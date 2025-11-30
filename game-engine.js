@@ -93,6 +93,18 @@ class GameEngine {
             startScreen.style.display = 'none';
             console.log('Start screen hidden');
 
+            // Ensure game screen and scene content are visible
+            const gameScreen = document.getElementById('game-screen');
+            const sceneContent = document.getElementById('scene-content');
+            if (gameScreen) {
+                gameScreen.style.opacity = '1';
+                gameScreen.style.visibility = 'visible';
+            }
+            if (sceneContent) {
+                sceneContent.style.opacity = '1';
+                sceneContent.style.visibility = 'visible';
+            }
+
             // Check if there's a saved game
             const hasSave = localStorage.getItem('hades_pluton_save') ||
                            localStorage.getItem('hades_pluton_autosave');
@@ -120,12 +132,16 @@ class GameEngine {
      * Load a scene
      */
     loadScene(sceneId) {
+        console.log(`Loading scene: ${sceneId}`);
+
         const scene = this.scenes[sceneId];
         if (!scene) {
             console.error(`Scene ${sceneId} not found`);
+            console.log('Available scenes:', Object.keys(this.scenes));
             return;
         }
 
+        console.log(`Scene found: ${scene.title}`);
         this.state.currentScene = sceneId;
 
         // Mark as visited
@@ -139,6 +155,7 @@ class GameEngine {
         }
 
         // Render scene
+        console.log('Rendering scene...');
         this.renderScene(scene);
 
         // Execute scene entry effects
@@ -148,30 +165,50 @@ class GameEngine {
 
         // Auto-save
         this.autoSave();
+        console.log('Scene loaded successfully');
     }
 
     /**
      * Render the current scene
      */
     renderScene(scene) {
+        console.log('renderScene called for:', scene.title);
+
         // Update background
         const bg = document.getElementById('scene-background');
-        bg.className = `scene-bg ${scene.background || 'default-bg'}`;
+        if (bg) {
+            bg.className = `scene-bg ${scene.background || 'default-bg'}`;
+            console.log('Background updated:', scene.background);
+        } else {
+            console.error('scene-background element not found!');
+        }
 
         // Update title
         const title = document.getElementById('scene-title');
-        title.textContent = scene.title;
-        title.className = 'scene-title fade-in';
+        if (title) {
+            title.textContent = scene.title;
+            title.className = 'scene-title fade-in';
+            console.log('Title updated:', scene.title);
+        } else {
+            console.error('scene-title element not found!');
+        }
 
         // Update description
         const desc = document.getElementById('scene-description');
-        desc.innerHTML = this.processText(scene.description);
-        desc.className = 'scene-description fade-in';
+        if (desc) {
+            desc.innerHTML = this.processText(scene.description);
+            desc.className = 'scene-description fade-in';
+            console.log('Description updated');
+        } else {
+            console.error('scene-description element not found!');
+        }
 
         // Render objects
+        console.log('Rendering', (scene.objects || []).length, 'objects');
         this.renderObjects(scene.objects || []);
 
         // Render navigation
+        console.log('Rendering', (scene.exits || []).length, 'exits');
         this.renderNavigation(scene.exits || []);
 
         // Update UI
@@ -179,8 +216,11 @@ class GameEngine {
 
         // Show dialogue if present
         if (scene.dialogue) {
+            console.log('Showing dialogue');
             this.showDialogue(scene.dialogue);
         }
+
+        console.log('renderScene completed');
     }
 
     /**
@@ -200,10 +240,17 @@ class GameEngine {
      */
     renderObjects(objects) {
         const container = document.getElementById('scene-objects');
+        if (!container) {
+            console.error('scene-objects container not found!');
+            return;
+        }
+
         container.innerHTML = '';
+        console.log(`Rendering ${objects.length} objects to scene-objects`);
 
         objects.forEach((obj, index) => {
             if (obj.condition && !obj.condition(this.state)) {
+                console.log(`Object ${obj.name} hidden by condition`);
                 return;
             }
 
@@ -216,6 +263,7 @@ class GameEngine {
 
             objElement.addEventListener('click', () => this.interactWithObject(obj));
             container.appendChild(objElement);
+            console.log(`Added object: ${obj.name}`);
         });
     }
 
@@ -224,10 +272,17 @@ class GameEngine {
      */
     renderNavigation(exits) {
         const container = document.getElementById('navigation-options');
+        if (!container) {
+            console.error('navigation-options container not found!');
+            return;
+        }
+
         container.innerHTML = '';
+        console.log(`Rendering ${exits.length} navigation options`);
 
         exits.forEach(exit => {
             if (exit.condition && !exit.condition(this.state)) {
+                console.log(`Exit "${exit.label}" hidden by condition`);
                 return;
             }
 
@@ -239,6 +294,7 @@ class GameEngine {
             `;
 
             exitElement.addEventListener('click', () => {
+                console.log(`Navigation clicked: ${exit.label} -> ${exit.target}`);
                 if (exit.action) {
                     exit.action(this);
                 }
@@ -246,7 +302,10 @@ class GameEngine {
             });
 
             container.appendChild(exitElement);
+            console.log(`Added navigation: ${exit.label}`);
         });
+
+        console.log(`Total navigation options rendered: ${container.children.length}`);
     }
 
     /**
