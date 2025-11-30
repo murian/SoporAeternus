@@ -421,8 +421,8 @@ const GAME_SCENES = {
                             },
                             next: {
                                 speaker: 'Lost Shade',
-                                text: '"Real... yes. Thank you for remembering me, even for this moment. That\'s all we have here—moments,
-                                       floating in an ocean of grey..."\n*The shade fades, seeming slightly more solid than before*'
+                                text: `"Real... yes. Thank you for remembering me, even for this moment. That's all we have here—moments, floating in an ocean of grey..."
+                                       *The shade fades, seeming slightly more solid than before*`
                             }
                         }
                     ]
@@ -791,7 +791,7 @@ const GAME_SCENES = {
         `,
         objects: [
             {
-                name: 'Philosopher's Circle',
+                name: "Philosopher's Circle",
                 icon: '📚',
                 description: `Great thinkers sit in eternal debate. Socrates argues with Plato, their words as sharp
                              as they were in life. They welcome you to join.`,
