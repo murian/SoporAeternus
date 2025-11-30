@@ -33,7 +33,7 @@ class GameEngine {
         this.scenes = sceneData;
         this.setupEventListeners();
         this.initializeAudio();
-        this.loadGame();
+        // Don't auto-load game on init - let user choose via start button
     }
 
     /**
@@ -64,7 +64,23 @@ class GameEngine {
         document.getElementById('start-screen').classList.add('fade-out');
         setTimeout(() => {
             document.getElementById('start-screen').style.display = 'none';
-            this.loadScene('river_styx');
+
+            // Check if there's a saved game
+            const hasSave = localStorage.getItem('hades_pluton_save') ||
+                           localStorage.getItem('hades_pluton_autosave');
+
+            if (hasSave) {
+                // Try to load the saved game (without notification)
+                const loaded = this.loadGame(false);
+                if (!loaded) {
+                    // If load failed, start fresh
+                    this.loadScene('river_styx');
+                }
+            } else {
+                // No save, start fresh
+                this.loadScene('river_styx');
+            }
+
             this.startParticleSystem();
         }, 1000);
     }
@@ -490,7 +506,7 @@ class GameEngine {
         }
     }
 
-    loadGame() {
+    loadGame(showNotification = true) {
         try {
             const saved = localStorage.getItem('hades_pluton_save') ||
                          localStorage.getItem('hades_pluton_autosave');
@@ -500,7 +516,9 @@ class GameEngine {
                 if (this.state.currentScene) {
                     this.loadScene(this.state.currentScene);
                 }
-                this.showNotification('Memory recalled from darkness...');
+                if (showNotification) {
+                    this.showNotification('Memory recalled from darkness...');
+                }
                 return true;
             }
         } catch (e) {
